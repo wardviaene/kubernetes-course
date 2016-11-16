@@ -9,4 +9,5 @@ spec:
   - name: k8s-demo
     image: wardviaene/k8s-demo
     ports:
-    - containerPort: 3000
+    - name: nodejs-port
+      containerPort: 3000
