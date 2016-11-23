@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: helloworld-v1-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: helloworld-v1
+    spec:
+      containers:
+      - name: k8s-demo
+        image: wardviaene/k8s-demo:latest
+        ports:
+        - name: nodejs-port
+          containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloworld-v1
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    nodePort: 30303
+    targetPort: 3000
+    protocol: TCP
+    name: http
+  selector:
+    app: helloworld-v1
