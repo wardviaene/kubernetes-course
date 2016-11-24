@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: helloworld-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: helloworld
+    spec:
+      containers:
+      - name: k8s-demo
+        image: wardviaene/k8s-demo
+        ports:
+        - name: nodejs-port
+          containerPort: 3000
+        volumeMounts:
+        - mountPath: /myvol
+          name: myvolume
+      volumes:
+      - name: myvolume
+        awsElasticBlockStore:
+          volumeID: # insert AWS EBS volumeID here
