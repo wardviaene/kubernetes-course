@@ -12,6 +12,8 @@ spec:
       containers:
       - name: wordpress
         image: wordpress:4-php7.0
+        # uncomment to fix perm issue, see also https://github.com/kubernetes/kubernetes/issues/2630
+        # command: ['bash', '-c', 'chown', 'www-data:www-data', '/var/www/html/wp-content/upload', '&&', 'apache2', '-DFOREGROUND']
         ports:
         - name: http-port
           containerPort: 80
@@ -69,5 +71,5 @@ spec:
       volumes:
       - name: uploads
         nfs:
-          server: eu-west-1a.fs-4918e480.efs.eu-west-1.amazonaws.com
+          server: eu-west-1a.fs-5714e89e.efs.eu-west-1.amazonaws.com
           path: /
