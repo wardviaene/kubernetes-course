@@ -1,0 +1,103 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pod-affinity-1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pod-affinity-1
+    spec:
+      containers:
+      - name: k8s-demo
+        image: wardviaene/k8s-demo
+        ports:
+        - name: nodejs-port
+          containerPort: 3000
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pod-affinity-2
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: pod-affinity-2
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - pod-affinity-1
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: redis
+        image: redis
+        ports:
+        - name: redis-port
+          containerPort: 6379
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pod-affinity-3
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: pod-affinity-3
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - pod-affinity-1
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: k8s-demo
+        image: wardviaene/k8s-demo
+        ports:
+        - name: nodejs-port
+          containerPort: 3000
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pod-affinity-4
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pod-affinity-4
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - pod-affinity-1
+                    - pod-affinity-3
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: k8s-demo
+        image: wardviaene/k8s-demo
+        ports:
+        - name: nodejs-port
+          containerPort: 3000
+---
