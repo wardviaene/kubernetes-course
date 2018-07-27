@@ -38,6 +38,11 @@ pgo show cluster all
 pgo show cluster mycluster --show-secrets=true
 ```
 
+# connect to psql
+```
+kubectl run -it --rm --image=postgres:10.4 psql -- psql -h mycluster -U postgres -W
+```
+
 
 # Create read replic
 ```
