@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloworld-service
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:region:accountid:certificate/..." #replace this value
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    service.beta.kubernetes.io/aws-load-balancer-connection-draining-enabled: "true"
+    service.beta.kubernetes.io/aws-load-balancer-connection-draining-timeout: "60"
+    service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: "environment=dev,app=helloworld"
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: nodejs-port
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: nodejs-port
+    protocol: TCP
+  selector:
+    app: helloworld
+  type: LoadBalancer
