@@ -13,7 +13,7 @@ spec:
       - name: wordpress
         image: wordpress:4-php7.0
         # uncomment to fix perm issue, see also https://github.com/kubernetes/kubernetes/issues/2630
-        # command: ['bash', '-c', 'chown www-data:www-data /var/www/html/wp-content/uploads && apache2-foreground']
+        # command: ['bash', '-c', 'mkdir -p /var/www/html/wp-content/uploads; chown www-data:www-data /var/www/html/wp-content/uploads && docker-entrypoint.sh apache2-foreground']
         ports:
         - name: http-port
           containerPort: 80
