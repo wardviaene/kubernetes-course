@@ -1,0 +1,34 @@
+pipeline {
+  agent {
+    kubernetes {
+      label 'helm-pod'
+      containerTemplate {
+        name 'helm'
+        image 'wardviaene/helm-s3'
+        ttyEnabled true
+        command 'cat'
+      }
+    }
+  }
+  stages {
+    stage('Run helm') {
+      steps {
+        container('helm') {
+          git url: 'git://github.com/wardviaene/kubernetes-course.git', branch: 'master'
+          sh '''
+          HELM_BUCKET=helm-rytcufor
+          PACKAGE=demo-chart
+          export AWS_REGION=eu-west-1
+         
+          cp -r /home/helm/.helm ~
+          helm repo add my-charts s3://${HELM_BUCKET}/charts
+          cd helm/${PACKAGE}
+          helm dependency update
+          helm package .
+          helm s3 push --force ${PACKAGE}-*.tgz my-charts
+          '''
+        }
+      }
+    }
+  }
+}
