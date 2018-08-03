@@ -2,22 +2,13 @@ pipeline {
   agent {
     kubernetes {
       label 'helm-pod'
-      defaultContainer 'jnlp'
-      yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    some-label: helm-pod
-spec:
-  serviceAccount: jenkins
-  containers:
-  - name: helm-pod
-    image: wardviaene/helm-s3
-    command:
-    - cat
-    tty: true
-"""
+      serviceAccount 'jenkins'
+      containerTemplate {
+        name 'helm-pod'
+        image 'wardviaene/helm-s3'
+        ttyEnabled true
+        command 'cat'
+      }
     }
   }
   stages {
@@ -29,7 +20,7 @@ spec:
           HELM_BUCKET=helm-rytcufor
           PACKAGE=demo-chart
           export AWS_REGION=eu-west-1
-         
+
           cp -r /home/helm/.helm ~
           helm repo add my-charts s3://${HELM_BUCKET}/charts
           DEPLOYED=$(helm list |grep -E "^${PACKAGE}" |grep DEPLOYED |wc -l)
@@ -38,6 +29,7 @@ spec:
           else
             helm upgrade ${PACKAGE} my-charts/${PACKAGE}
           fi
+          echo "deployed!"
           '''
         }
       }
