@@ -2,7 +2,7 @@ pipeline {
   agent {
     kubernetes {
       label 'helm-pod'
-      serviceAccount 'jenkins'
+      serviceAccount 'jenkins-helm'
       containerTemplate {
         name 'helm-pod'
         image 'wardviaene/helm-s3'
