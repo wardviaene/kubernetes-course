@@ -1,0 +1,21 @@
+# An Ingress with 2 hosts and 3 endpoints
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: helloworld-rules
+spec:
+  rules:
+  - host: helloworld-v1.kubernetes.newtech.academy
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: helloworld-v1
+          servicePort: 80
+  - host: helloworld-v2.kubernetes.newtech.academy
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: helloworld-v2
+          servicePort: 80
