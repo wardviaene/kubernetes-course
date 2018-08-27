@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: helloworld-deployment
+  name: helloworld-rediness
 spec:
   replicas: 3
   template:
