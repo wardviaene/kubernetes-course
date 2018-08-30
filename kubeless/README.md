@@ -42,3 +42,25 @@ kubeless function call myfunction --data 'This is some data'
 kubectl create -f nginx-ingress-controller-with-elb.yml
 kubeless trigger http create myfunction --function-name myfunction --hostname myfunction.kubernetes.newtech.academy
 ```
+
+
+# PubSub
+## Kafka Installation
+```
+export RELEASE=$(curl -s https://api.github.com/repos/kubeless/kafka-trigger/releases/latest | grep tag_name | cut -d '"' -f 4)
+kubectl create -f https://github.com/kubeless/kafka-trigger/releases/download/$RELEASE/kafka-zookeeper-$RELEASE.yaml
+```
+
+## Deploy function
+```
+kubeless function deploy uppercase --runtime nodejs6 \
+                                --dependencies node-example/package.json \
+                                --handler test.uppercase \
+                                --from-file node-example/uppercase.js
+```
+
+## Trigger and publish
+```
+kubeless trigger kafka create test --function-selector created-by=kubeless,function=uppercase --trigger-topic uppercase
+kubeless topic publish --topic uppercase --data "this message will be converted to uppercase"
+```
