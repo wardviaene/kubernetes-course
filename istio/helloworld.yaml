@@ -1,0 +1,112 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: hello
+        version: v1
+    spec:
+      containers:
+      - name: hello
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: hello
+        - name: NEXT
+          value: "world:8080"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+  labels:
+    app: hello
+spec:
+  selector:
+    app: hello
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: world
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: world
+        version: v1
+    spec:
+      containers:
+      - name: world
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: world
+        - name: NEXT
+          value: "world-2:8080"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: world
+  labels:
+    app: world
+spec:
+  selector:
+    app: world
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: world-2
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: world-2
+        version: v1
+    spec:
+      containers:
+      - name: world-2
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: "!!!" 
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: world-2
+  labels:
+    app: world-v2
+spec:
+  selector:
+    app: world-2
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
