@@ -43,7 +43,7 @@ cd istio-1.0.1 # change 1.0.1 in your version
 Apply CRDs:
 
 ```
-kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
+kubectl apply -f ~/istio-1.0.1/install/kubernetes/helm/istio/templates/crds.yaml
 ```
 
 Wait a few seconds.
@@ -51,12 +51,12 @@ Wait a few seconds.
 
 Option 1: with no mutual TLS authentication
 ```
-kubectl apply -f install/kubernetes/istio-demo.yaml
+kubectl apply -f ~/istio-1.0.1/install/kubernetes/istio-demo.yaml
 ```
 
 Option 2: or with mutual TLS authentication
 ```
-kubectl apply -f install/kubernetes/istio-demo-auth.yaml
+kubectl apply -f ~/istio-1.0.1/install/kubernetes/istio-demo-auth.yaml
 ```
 
 ## Example app

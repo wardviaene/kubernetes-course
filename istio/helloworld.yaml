@@ -101,7 +101,7 @@ kind: Service
 metadata:
   name: world-2
   labels:
-    app: world-v2
+    app: world-2
 spec:
   selector:
     app: world-2

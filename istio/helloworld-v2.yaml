@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello-v2
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: hello
+        version: v2
+    spec:
+      containers:
+      - name: hello
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: hello, this is v2
+        - name: NEXT
+          value: "world-2:8080"
+        ports:
+        - name: http
+          containerPort: 8080
