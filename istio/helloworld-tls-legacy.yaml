@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: legacy
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: end-tls
+  namespace: legacy
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: end
+        version: v1-tls
+    spec:
+      containers:
+      - name: hello
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: "!!!"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello-reverse-tls
+  namespace: legacy
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hello-reverse
+        version: v1-tls
+    spec:
+      containers:
+      - name: hello
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: hello
+        - name: NEXT
+          value: "world-reverse.ns2:8080"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: end
+  namespace: legacy
+  labels:
+    app: end
+spec:
+  selector:
+    app: end
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-reverse
+  namespace: legacy
+  labels:
+    app: hello-reverse
+spec:
+  selector:
+    app: hello-reverse
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
