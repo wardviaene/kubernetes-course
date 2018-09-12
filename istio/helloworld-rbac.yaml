@@ -1,0 +1,244 @@
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRole
+metadata:
+  name: hello-viewer
+  namespace: default
+spec:
+  rules:
+  - services: ["hello.default.svc.cluster.local"]
+    methods: ["GET", "HEAD"]
+---
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRole
+metadata:
+  name: world-viewer
+  namespace: default
+spec:
+  rules:
+  - services: ["world.default.svc.cluster.local"]
+    methods: ["GET", "HEAD"]
+---
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRole
+metadata:
+  name: world-2-viewer
+  namespace: default
+spec:
+  rules:
+  - services: ["world-2.default.svc.cluster.local"]
+    methods: ["GET", "HEAD"]
+---
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRoleBinding
+metadata:
+  name: istio-ingress-binding
+  namespace: default
+spec:
+  subjects:
+  - properties:
+      source.namespace: "istio-system"
+  roleRef:
+    kind: ServiceRole
+    name: "hello-viewer"
+---
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRoleBinding
+metadata:
+  name: hello-user-binding
+  namespace: default
+spec:
+  subjects:
+  - user: "cluster.local/ns/default/sa/hello"
+  roleRef:
+    kind: ServiceRole
+    name: "world-viewer"
+---
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRoleBinding
+metadata:
+  name: world-user-binding
+  namespace: default
+spec:
+  subjects:
+  - user: "cluster.local/ns/default/sa/world"
+  roleRef:
+    kind: ServiceRole
+    name: "world-2-viewer"
+---
+### 
+### Kubernetes Service accounts
+###
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hello
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: world
+---
+### 
+### helloworld.yaml deployments, including a serviceaccount
+### for the hello deployment and the world deployment
+###
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hello
+        version: v1
+    spec:
+      serviceAccountName: hello  # service account
+      containers:
+      - name: hello
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: hello
+        - name: NEXT
+          value: "world:8080"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+  labels:
+    app: hello
+spec:
+  selector:
+    app: hello
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: world
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: world
+        version: v1
+    spec:
+      serviceAccountName: world  # service account
+      containers:
+      - name: world
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: world
+        - name: NEXT
+          value: "world-2:8080"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: world
+  labels:
+    app: world
+spec:
+  selector:
+    app: world
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: world-2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: world-2
+        version: v1
+    spec:
+      containers:
+      - name: world-2
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: "!!!" 
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: world-2
+  labels:
+    app: world-2
+spec:
+  selector:
+    app: world-2
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: helloworld-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: helloworld
+spec:
+  hosts:
+  - "hello-rbac.example.com"
+  gateways:
+  - helloworld-gateway
+  http:
+  - route:
+    - destination:
+        host: hello.default.svc.cluster.local
+        subset: v1
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: hello
+spec:
+  host: hello.default.svc.cluster.local
+  # uncomment to enable mutual TLS
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
