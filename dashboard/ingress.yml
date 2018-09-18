@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kubernetes-dashboard
+  namespace: kube-system
+  annotations:
+spec:
+  rules:
+  - host: dashboard.ktest.progressoft.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 443
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: tomcat
+#   namespace: tomcat
+#   annotations:
+#     # letsencrypt support enabled (https://github.com/jetstack/kube-lego)
+#     #kubernetes.io/tls-acme: "true"
+#     # use the Kubernetes ingress "nginx"
+#     #kubernetes.io/ingress.class: "nginx"
+# spec:
+#   rules:
+#   - host: tomcat.kjenkins.progressoft.com
+#     http:
+#       paths:
+#       - path: /
+#         backend:
+#           serviceName: tomcat-svc
+#           servicePort: 8080   

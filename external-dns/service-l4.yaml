@@ -10,7 +10,7 @@ metadata:
     # Increase the ELB idle timeout to avoid issues with WebSockets or Server-Sent Events.
     service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
     # external-dns
-    external-dns.alpha.kubernetes.io/hostname: ingress.kubernetes.newtech.academy
+    external-dns.alpha.kubernetes.io/hostname: ingress.dev.psamman.com
 spec:
   type: LoadBalancer
   selector:
