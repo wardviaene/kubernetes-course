@@ -1,0 +1,15 @@
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "jwt-example"
+spec:
+  targets:
+  - name: hello
+  peers:
+  - mtls: {}
+  origins:
+  - jwt:
+      issuer: "http-echo@http-echo.kubernetes.newtech.academy"
+      jwksUri: "http://auth.kubernetes.newtech.academy/.well-known/jwks.json"
+  principalBinding: USE_ORIGIN
+---

@@ -1,0 +1,38 @@
+apiVersion: authentication.istio.io/v1alpha1
+kind: "MeshPolicy"
+metadata:
+  name: "default"
+spec:
+  peers:
+  - mtls: {}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: "enable-mtls"
+  namespace: "default" # even though we specify a namespace, this rule applies to all namespaces
+spec:
+  host: "*.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+ name: "api-server"
+spec:
+ host: "kubernetes.default.svc.cluster.local"
+ trafficPolicy:
+   tls:
+     mode: DISABLE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: "legacy"
+spec:
+  host: "end.legacy.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: DISABLE

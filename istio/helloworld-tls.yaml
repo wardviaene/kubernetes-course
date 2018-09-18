@@ -1,0 +1,246 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns1
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns2
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello-tls
+  namespace: ns1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hello
+        version: v1-tls
+    spec:
+      containers:
+      - name: hello
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: hello
+        - name: NEXT
+          value: "world.ns2:8080"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: world-tls
+  namespace: ns2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: world
+        version: v1-tls
+    spec:
+      containers:
+      - name: hello
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: world
+        - name: NEXT
+          value: "end.legacy:8080"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: world-reverse-tls
+  namespace: ns2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: world-reverse
+        version: v1-tls
+    spec:
+      containers:
+      - name: hello
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: world
+        - name: NEXT
+          value: "end-reverse.ns1:8080"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: end-reverse-tls
+  namespace: ns1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: end-reverse
+        version: v1-tls
+    spec:
+      containers:
+      - name: hello
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: "!!!"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+  namespace: ns1
+  labels:
+    app: hello
+spec:
+  selector:
+    app: hello
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: world
+  namespace: ns2
+  labels:
+    app: world
+spec:
+  selector:
+    app: world
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: world-reverse
+  namespace: ns2
+  labels:
+    app: world-reverse
+spec:
+  selector:
+    app: world-reverse
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: end-reverse
+  namespace: ns1
+  labels:
+    app: end-reverse
+spec:
+  selector:
+    app: end-reverse
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: helloworld-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: hello
+spec:
+  host: hello.ns1.svc.cluster.local
+  # uncomment to enable mutual TLS
+  #trafficPolicy:
+  #  tls:
+  #    mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1-tls
+    labels:
+      version: v1-tls
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: hello-reverse
+spec:
+  host: hello-reverse.legacy.svc.cluster.local
+  # uncomment to enable mutual TLS
+  #trafficPolicy:
+  #  tls:
+  #    mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1-tls
+    labels:
+      version: v1-tls
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: helloworld-tls
+spec:
+  hosts:
+  - "hello-tls.example.com"
+  gateways:
+  - helloworld-gateway
+  http:
+  - route: 
+    - destination:
+        host: hello.ns1.svc.cluster.local
+        subset: v1-tls # match v3 only
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: helloworld-tls-reverse
+spec:
+  hosts:
+  - "hello-tls-reverse.example.com"
+  gateways:
+  - helloworld-gateway
+  http:
+  - route: 
+    - destination:
+        host: hello-reverse.legacy.svc.cluster.local
+        subset: v1-tls 
+        port:
+          number: 8080
