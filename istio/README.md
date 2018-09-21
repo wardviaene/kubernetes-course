@@ -80,3 +80,9 @@ Create pods, services, destinationrules, virtualservices
 kubectl create -f <(istioctl kube-inject -f helloworld-tls.yaml)
 kubectl create -f helloworld-legacy.yaml
 ```
+
+### End-user authentication
+```
+kubectl create -f <(istioctl kube-inject -f helloworld-jwt.yaml)
+kubectl create -f helloworld-jwt-enable.yaml
+```

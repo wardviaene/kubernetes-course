@@ -1,0 +1,52 @@
+#
+# http
+# 
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: ifconfig-co-http
+spec:
+  hosts:
+  - ifconfig.co
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
+  resolution: DNS
+  location: MESH_EXTERNAL
+---
+#
+# https
+# 
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: ifconfig-co-https
+spec:
+  hosts:
+  - ifconfig.co
+  ports:
+  - number: 443
+    name: https
+    protocol: HTTPS
+  resolution: DNS
+  location: MESH_EXTERNAL
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ifconfig-co
+spec:
+  hosts:
+  - ifconfig.co
+  tls:
+  - match:
+    - port: 443
+      sni_hosts:
+      - ifconfig.co
+    route:
+    - destination:
+        host: ifconfig.co
+        port:
+          number: 443
+      weight: 100
