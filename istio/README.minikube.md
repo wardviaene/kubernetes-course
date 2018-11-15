@@ -12,7 +12,8 @@ minikube start --memory=8192 --cpus=4 --kubernetes-version=v1.10.0 --vm-driver=`
 ## download (1.0.3):
 ```
 cd ~
-wget https://github.com/istio/istio/releases/download/1.0.3/istio-1.0.3-linux.tar.gz
+wget https://github.com/istio/istio/releases/download/1.0.3/istio-1.0.3-linux.tar.gz # linux
+wget https://github.com/istio/istio/releases/download/1.0.3/istio-1.0.3-osx.tar.gz # macos
 tar -xzvf istio-1.0.3-linux.tar.gz
 cd istio-1.0.3
 echo 'export PATH="$PATH:~/istio-1.0.3/bin"' >> ~/.profile
