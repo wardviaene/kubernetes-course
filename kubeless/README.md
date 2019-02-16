@@ -1,6 +1,6 @@
 # Install CLI
 ```
-wget https://github.com/kubeless/kubeless/releases/download/v1.0.0-alpha.8/kubeless_linux-amd64.zip
+wget https://github.com/kubeless/kubeless/releases/download/v1.0.2/kubeless_linux-amd64.zip
 unzip kubeless_linux-amd64.zip
 sudo mv bundles/kubeless_linux-amd64/kubeless /usr/local/bin
 rm -r bundles/
@@ -8,7 +8,7 @@ rm -r bundles/
 
 # Deploy kubeless
 kubectl create ns kubeless
-kubectl create -f https://github.com/kubeless/kubeless/releases/download/v1.0.0-alpha.8/kubeless-v1.0.0-alpha.8.yaml 
+kubectl create -f https://github.com/kubeless/kubeless/releases/download/v1.0.2/kubeless-v1.0.2.yaml
 
 # Example function
 
