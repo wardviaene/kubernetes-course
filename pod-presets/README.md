@@ -23,6 +23,14 @@ spec:
       settings.k8s.io/v1alpha1: "true"
 
 ```
+create the cluster again on aws
+
+kops create cluster --name=dev.psamman.com --state=s3://kops-state-ammar --zones=eu-west-1a --node-count=3 --node-size=t2.micro --master-size=t2.micro --dns-zone=dev.psamman.com
+
+now edit the cluster using this command 
+kops edit cluster dev.psamman.com --state=s3://kops-state-ammar
+and paste at the end of the file the new spces
+kops update cluster dev.psamman.com --state=s3://kops-state-ammar --yes
 
 # running the demo
 First apply the PodPresets:

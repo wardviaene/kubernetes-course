@@ -44,10 +44,12 @@ spec:
           ports:
           - name: http
             containerPort: 80
-            hostPort: 80
+            hostPort: 80 
+             #if we have loadbalancer hash it
           - name: https
             containerPort: 443
-            hostPort: 443
+            hostPort: 443  
+             #if we have loadbalancer hash it
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -212,4 +214,3 @@ subjects:
     name: nginx-ingress-serviceaccount
     namespace: default
 ---
-
