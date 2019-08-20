@@ -188,9 +188,9 @@ metadata:
 spec:
   host: hello.ns1.svc.cluster.local
   # uncomment to enable mutual TLS
-  #trafficPolicy:
-  #  tls:
-  #    mode: ISTIO_MUTUAL
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
   subsets:
   - name: v1-tls
     labels:
@@ -203,9 +203,9 @@ metadata:
 spec:
   host: hello-reverse.legacy.svc.cluster.local
   # uncomment to enable mutual TLS
-  #trafficPolicy:
-  #  tls:
-  #    mode: ISTIO_MUTUAL
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
   subsets:
   - name: v1-tls
     labels:
