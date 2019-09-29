@@ -1,9 +1,12 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hpa-example
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: hpa-example
   template:
     metadata:
       labels:
@@ -39,7 +42,7 @@ metadata:
   name: hpa-example-autoscaler
 spec:
   scaleTargetRef:
-    apiVersion: extensions/v1beta1
+    apiVersion: apps/v1
     kind: Deployment
     name: hpa-example
   minReplicas: 1

@@ -1,9 +1,12 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: deployment-1
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
   template:
     metadata:
       labels:
@@ -16,16 +19,19 @@ spec:
         - name: nodejs-port
           containerPort: 3000
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: deployment-2
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: myapp-2
   template:
     metadata:
       labels:
-        app: myapp
+        app: myapp-2
     spec:
       containers:
       - name: k8s-demo

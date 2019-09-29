@@ -1,9 +1,12 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tolerations-1
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: tolerations-1
   template:
     metadata:
       labels:
@@ -16,12 +19,15 @@ spec:
         - name: nodejs-port
           containerPort: 3000
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tolerations-2
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: tolerations-2
   template:
     metadata:
       labels:

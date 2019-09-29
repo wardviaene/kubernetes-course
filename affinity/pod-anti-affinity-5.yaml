@@ -1,9 +1,12 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pod-affinity-5
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: pod-affinity-5
   template:
     metadata:
       labels:

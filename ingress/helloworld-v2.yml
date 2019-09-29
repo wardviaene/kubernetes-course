@@ -1,9 +1,12 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: helloworld-v2-deployment
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: helloworld-v2
   template:
     metadata:
       labels:
