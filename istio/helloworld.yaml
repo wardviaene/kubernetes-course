@@ -1,9 +1,12 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: hello
   template:
     metadata:
       labels:
@@ -36,12 +39,15 @@ spec:
     port: 8080
     targetPort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: world
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: world
   template:
     metadata:
       labels:
@@ -74,12 +80,15 @@ spec:
     port: 8080
     targetPort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: world-2
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: world-2
   template:
     metadata:
       labels:

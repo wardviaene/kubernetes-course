@@ -1,9 +1,12 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-v3
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      app: hello
   template:
     metadata:
       labels:
@@ -24,12 +27,15 @@ spec:
         - name: http
           containerPort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-v3-latency
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: hello
   template:
     metadata:
       labels:

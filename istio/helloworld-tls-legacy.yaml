@@ -3,13 +3,16 @@ kind: Namespace
 metadata:
   name: legacy
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: end-tls
   namespace: legacy
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: end
   template:
     metadata:
       labels:
@@ -26,13 +29,16 @@ spec:
         - name: http
           containerPort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-reverse-tls
   namespace: legacy
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: hello-reverse
   template:
     metadata:
       labels:

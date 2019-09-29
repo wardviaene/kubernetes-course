@@ -8,13 +8,16 @@ kind: Namespace
 metadata:
   name: ns2
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-tls
   namespace: ns1
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: hello
   template:
     metadata:
       labels:
@@ -33,13 +36,16 @@ spec:
         - name: http
           containerPort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: world-tls
   namespace: ns2
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: world
   template:
     metadata:
       labels:
@@ -58,13 +64,16 @@ spec:
         - name: http
           containerPort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: world-reverse-tls
   namespace: ns2
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: world-reverse
   template:
     metadata:
       labels:
@@ -83,13 +92,16 @@ spec:
         - name: http
           containerPort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: end-reverse-tls
   namespace: ns1
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: end-reverse
   template:
     metadata:
       labels:
