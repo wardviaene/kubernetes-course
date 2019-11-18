@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-2
+  template:
+    metadata:
+      labels:
+        app: hello-2
+    spec:
+      containers:
+      - securityContext:
+          runAsUser: 0
+        name: hello-2
+        image: wardviaene/http-echo
+        env:
+        - name: TEXT
+          value: "hello world 2"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-2
+  labels:
+    app: hello-2
+spec:
+  selector:
+    app: hello-2
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
