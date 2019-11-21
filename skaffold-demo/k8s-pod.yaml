@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: skaffold-demo
+  labels:
+    app: skaffold-demo
+spec:
+  containers:
+  - name: skaffold-demo
+    image: wardviaene/skaffold-demo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: skaffold-demo
+spec:
+  selector:
+    app: skaffold-demo
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
