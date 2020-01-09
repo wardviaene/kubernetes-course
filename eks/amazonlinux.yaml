@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: amazonlinux
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: amazonlinux
+  template:
+    metadata:
+      labels:
+        app: amazonlinux
+    spec:
+      serviceAccount: myserviceaccount
+      containers:
+      - name: amazonlinux
+        image: amazonlinux:2
+        command: ["sleep", "infinity"]
