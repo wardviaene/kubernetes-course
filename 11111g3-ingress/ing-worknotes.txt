@@ -1,0 +1,63 @@
+ingress controller acts as loadbalancer
+
+#Source  https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
+
+https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
+
+======
+#nginx pod created
+
+kubectl get pods -n ingress-nginx
+NAME                                        READY   STATUS    RESTARTS   AGE
+nginx-ingress-controller-7f74f657bd-jm6d9   1/1     Running   0          8m32s
+[root@ip-hostname ~]# kubectl get pods,deploy,service -n ingress-nginx
+
+NAME                                            READY   STATUS    RESTARTS   AGE
+pod/nginx-ingress-controller-7f74f657bd-jm6d9   1/1     Running   0          8m56s
+
+
+NAME                                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-ingress-controller   1/1     1            1           8m56s
+[root@ip-hostname ~]# kubectl get ingress
+NAME              HOSTS   ADDRESS         PORTS   AGE
+example-ingress   *       10.100.50.122   80      4m36s
+=========================================
+#ingress service created
+
+# kubectl describe ingress
+Name:             example-ingress
+Namespace:        default
+Address:          10.100.50.122
+Default backend:  default-http-backend:80 (<none>)
+Rules:
+  Host  Path  Backends
+  ----  ----  --------
+  *
+        /apple    apple-service:5678 (172.17.0.10:5678)
+        /banana   banana-service:5678 (172.17.0.11:5678)
+Annotations:
+  ingress.kubernetes.io/rewrite-target:  /
+Events:
+  Type    Reason  Age    From                      Message
+  ----    ------  ----   ----                      -------
+  Normal  CREATE  4m48s  nginx-ingress-controller  Ingress default/example-ingress
+=================================
+
+
+curl -kL http://localhost/apple
+apple
+
+# curl -kL http://localhost/banana
+banana
+
+# curl -kL http://localhost/notfound
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>openresty/1.15.8.2</center>
+</body>
+</html>
+===========================================
+
+
