@@ -33,3 +33,7 @@ Secret:
 echo -n ‘admin’ > ./username.txt
 echo -n ‘abcd1234’ ./password.txt
 kubectl create secret generic mysecret --from-file=./username.txt --from-file=./password.txt
+=====================
+
+DNS
+https://github.com/gaya3chandran1/kubernetes-course/tree/master/1g3-ingress-cm-secrets-dns/g3-dns
