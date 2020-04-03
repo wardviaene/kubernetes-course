@@ -9,3 +9,9 @@ https://github.com/gaya3chandran1/kubernetes-course/blob/master/wordpress-volume
 PV Claim
 https://github.com/gaya3chandran1/kubernetes-course/blob/master/wordpress-volumes/pv-claim.yml
 ==================
+config map
+https://github.com/gaya3chandran1/kubernetes-course/blob/master/configmap/nginx.yml
+
+kubectl create configmap nginx-config --from-file=congigmap/reverseproxy.conf
+
+https://github.com/gaya3chandran1/kubernetes-course/tree/master/configmap/g3-cm
