@@ -1,0 +1,1 @@
+Focus on config map,secrets,RBAC,ingress,DNS,Load balancer,certs
