@@ -1,0 +1,19 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cronjob2
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Allow
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cronjob
+              image: busybox
+              args:
+                - /bin/sh
+                - -c
+                - date; echo sleeping....; sleep 90s; echo exiting...;
+          restartPolicy: Never
