@@ -1,0 +1,11 @@
+Focus on config map,secrets,RBAC,ingress,DNS,Load balancer,certs
+
+For volumes look 
+aws autoprovisioner
+
+https://github.com/gaya3chandran1/kubernetes-course/blob/master/wordpress-volumes/storage.yml
+
++++++++++++
+PV Claim
+https://github.com/gaya3chandran1/kubernetes-course/blob/master/wordpress-volumes/pv-claim.yml
+==================
