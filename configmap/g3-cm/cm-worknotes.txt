@@ -1,0 +1,33 @@
+worknotes
+#https://matthewpalmer.net/kubernetes-app-developer/articles/ultimate-configmap-guide-kubernetes.html
+
+ls -lrt
+total 12
+-rw-r--r-- 1 root root 310 Apr  3 07:18 config-map.yaml
+-rw-r--r-- 1 root root 779 Apr  3 07:59 pod.yaml
+-rw-r--r-- 1 root root 209 Apr  3 08:02 pod-env-var.yaml
+
+============
+kubectl get cm,pods
+NAME                          DATA   AGE
+configmap/example-configmap   3      49m
+============
+kubectl get pods | grep -i pod
+pod-env-var                              1/1     Running   0          4m31s
+pod-using-configmap                      1/1     Running   0          9m14s
+==================
+
+#pod with config volume
+
+kubectl exec -it pod-using-configmap bash
+root@pod-using-configmap:/# cd /etc/config ; ls -lrt
+total 0
+lrwxrwxrwx 1 root root 11 Apr  3 07:59 keys -> ..data/keys
+lrwxrwxrwx 1 root root 19 Apr  3 07:59 database_uri -> ..data/database_uri
+lrwxrwxrwx 1 root root 15 Apr  3 07:59 database -> ..data/database
+==============
+ kubectl exec -it pod-env-var bash
+root@pod-env-var:/# env
+keys=image.public.key=771
+rsa.public.key=42
+=============================================
