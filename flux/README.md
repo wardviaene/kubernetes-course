@@ -1,3 +1,7 @@
+# Flux demo repository
+
+https://github.com/wardviaene/flux-demo
+
 # Installation
 
 ```
