@@ -1,5 +1,5 @@
 # Files
-quickstart-for-gke.sh. Tested version available in directory, or latest from: https://github.com/CrunchyData/postgres-operator/blob/master/examples/quickstart-for-gke.sh
+There is no quickstart-for-gke.sh anymore. This has been replaced by quickstart.sh.
 
 # setup storage
 ```
@@ -8,7 +8,7 @@ kubectl create -f storage.yml
 
 # setup Operator
 ```
-./quickstart-for-gke.sh
+./quickstart.sh
 ./set-path.sh 
 ```
 
@@ -17,7 +17,8 @@ After these commands you'll need to logout and login again.
 # port forwarding
 
 ```
-kubectl port-forward postgres-operator-xxx-yyy 18443:8443
+kubectl get pods -n pgo
+kubectl port-forward -n pgo postgres-operator-xxx-yyy 8443:8443
 ```
 
 # Test command
@@ -30,17 +31,17 @@ pgo version
 
 ```
 pgo create cluster mycluster
-pgo show cluster all
 ```
 
 # show secrets
 ```
-pgo show cluster mycluster --show-secrets=true
+pgo show cluster mycluster
 ```
 
 # connect to psql
 ```
-kubectl run -it --rm --image=postgres:10.4 psql -- psql -h mycluster -U postgres -W
+pgo show user mycluster
+kubectl run -it --rm --image=postgres:10.4 psql-client -- psql -h mycluster.pgo -U testuser -W postgres
 ```
 
 
