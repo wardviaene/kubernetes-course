@@ -3,25 +3,14 @@
 # Alpha status
 As long as the PodPresets is in alpha status, the following changes need to be made in kops:
 
+Add:
 ```
 spec:
   kubeAPIServer:
-    enableAdmissionPlugins:
-    - Initializers
-    - NamespaceLifecycle
-    - LimitRanger
-    - ServiceAccount
-    - PersistentVolumeLabel
-    - DefaultStorageClass
-    - DefaultTolerationSeconds
-    - MutatingAdmissionWebhook
-    - ValidatingAdmissionWebhook
-    - NodeRestriction
-    - ResourceQuota
+    appendAdmissionPlugins:
     - PodPreset
     runtimeConfig:
       settings.k8s.io/v1alpha1: "true"
-
 ```
 
 # running the demo
