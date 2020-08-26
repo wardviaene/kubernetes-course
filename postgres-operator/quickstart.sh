@@ -8,4 +8,6 @@ echo "- install the client"
 echo ""
 kubectl create namespace pgo
 kubectl apply -f postgres-operator.yml
+echo "wait until deploy job is complete..."
+kubectl wait --for=condition=complete --timeout=180s -n pgo job/pgo-deploy
 ./client-setup.sh
