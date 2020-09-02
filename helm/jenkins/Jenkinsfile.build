@@ -22,6 +22,8 @@ pipeline {
          
           cp -r /home/helm/.helm ~
           helm repo add my-charts s3://${HELM_BUCKET}/charts
+          helm repo add stable https://kubernetes-charts.storage.googleapis.com
+          helm repo list
           cd helm/${PACKAGE}
           helm dependency update
           helm package .
