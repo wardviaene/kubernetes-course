@@ -1,0 +1,27 @@
+# An Ingress with 2 hosts and 3 endpoints
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: helloworld-rules
+spec:
+  rules:
+  - host: helloworld-v1.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: helloworld-v1
+            port:
+              number: 80
+  - host: helloworld-v2.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: helloworld-v2
+            port:
+              number: 80
