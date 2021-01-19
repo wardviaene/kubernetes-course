@@ -7,7 +7,7 @@ WORKDIR /go/src/github.com/wardviaene/kubernetes-course/mutatingwebhook
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o mutagingwebhook *.go
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o mutatingwebhook *.go
 
 #
 # Runtime container
@@ -24,4 +24,4 @@ COPY --from=go-builder /go/src/github.com/wardviaene/kubernetes-course/mutatingw
 
 USER app
 
-CMD ["./mutagingwebhook"]  
+CMD ["./mutatingwebhook"]  
