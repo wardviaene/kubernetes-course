@@ -21,6 +21,13 @@ func (s Server) getCA(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	// if base64 parameter is set, return in base64 format
+	req.ParseForm()
+	if _, hasParam := req.Form["base64"]; hasParam {
+		fmt.Fprintf(w, string(base64.StdEncoding.EncodeToString(s.CaPEM)))
+		return
+	}
+
 	fmt.Fprintf(w, string(s.CaPEM))
 }
 
