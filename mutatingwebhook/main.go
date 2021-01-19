@@ -121,6 +121,7 @@ func certsetup() (serverTLSConf *tls.Config, clientTLSConf *tls.Config, caPEMByt
 		SubjectKeyId: []byte{1, 2, 3, 4, 6},
 		ExtKeyUsage:  []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth, x509.ExtKeyUsageServerAuth},
 		KeyUsage:     x509.KeyUsageDigitalSignature,
+		DNSNames:     []string{"mutatingwebhook.mutatingwebhook.svc"},
 	}
 
 	certPrivKey, err := rsa.GenerateKey(rand.Reader, 4096)
