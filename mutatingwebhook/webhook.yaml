@@ -1,0 +1,72 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: "mymutatingwebhook.example.com"
+webhooks:
+- name: "mymutatingwebhook.example.com"
+  namespaceSelector:
+    matchLabels:
+      webhook: enabled
+  rules:
+  - apiGroups:   [""]
+    apiVersions: ["v1"]
+    operations:  ["CREATE"]
+    resources:   ["pods"]
+  clientConfig:
+    service:
+      namespace: "mutatingwebhook"
+      name: "mutatingwebhook"
+      path: "/webhook"
+    caBundle: "cGxhY2Vob2xkZXIK"
+  admissionReviewVersions: ["v1", "v1beta1"]
+  sideEffects: None
+  timeoutSeconds: 5
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mutatingwebhook
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: testmutatingwebhook
+  labels:
+    webhook: enabled
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mutatingwebhook
+  namespace: mutatingwebhook
+  labels:
+    app: mutatingwebhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mutatingwebhook
+  template:
+    metadata:
+      labels:
+        app: mutatingwebhook
+    spec:
+      containers:
+      - name: mutatingwebhook
+        imagePullPolicy: Always
+        image: wardviaene/mutatingwebhook-example
+        ports:
+        - containerPort: 8443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mutatingwebhook
+  namespace: mutatingwebhook
+spec:
+  selector:
+    app: mutatingwebhook
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 8443
