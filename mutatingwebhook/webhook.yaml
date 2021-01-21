@@ -53,7 +53,6 @@ spec:
     spec:
       containers:
       - name: mutatingwebhook
-        imagePullPolicy: Always
         image: wardviaene/mutatingwebhook-example
         ports:
         - containerPort: 8443
