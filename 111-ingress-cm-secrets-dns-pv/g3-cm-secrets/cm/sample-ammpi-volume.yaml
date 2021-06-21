@@ -1,0 +1,29 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: oche-umpi
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: oche-umpi
+        microservice: umpi
+        kubernetes-service: oche-umpi
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+      - name: oche-umpi
+        image: docker.ochedc.tureanalytics.com/dockadmin/umpi-document-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: umpi-volume
+          mountPath: /opt/umpi_config/Document_Type_Config
+      volumes:
+      - name: umpi-volume
+        configMap:
+          name: umpi-config
+      imagePullSecrets:
+      - name: dockadmin

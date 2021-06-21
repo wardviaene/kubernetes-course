@@ -1,0 +1,9 @@
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: demo-nats-public-service
+subsets:
+  - addresses:
+      - ip: 107.170.221.32
+    ports:
+      - port: 8222

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kin-service-app
+spec:
+  selector:
+    matchLabels:
+      app: kin-service-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: kin-service-app
+    spec:
+      containers:
+        - name: kin-service-app
+          image: abhirockzz/kintestapp
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP

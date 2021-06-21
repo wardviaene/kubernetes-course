@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config3
+data:
+  appconfig.json: |
+    {
+      "array": [
+        1,
+        2,
+        3
+      ],
+      "boolean": true,
+      "number": 123,
+      "object": {
+        "a": "b",
+        "c": "d",
+        "e": "f"
+      },
+      "string": "Hello World"
+    }
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod4
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    env:
+      - name: APP_CONFIG_JSON
+        valueFrom:
+          configMapKeyRef:
+            name: config3
+            key: appconfig.json

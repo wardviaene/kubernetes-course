@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logz-deployment
+  labels:
+    app: logz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logz
+  template:
+    metadata:
+      labels:
+        app: logz
+    spec:
+      containers:
+      - name: logz
+        image: abhirockzz/logz
+        volumeMounts:
+        - name: azure-disk-vol
+          mountPath: /mnt/logs
+      volumes:
+        - name: azure-disk-vol
+          persistentVolumeClaim:
+            claimName: azure-disk-pvc

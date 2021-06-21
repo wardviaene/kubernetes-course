@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kvstore
+spec:
+  selector:
+    matchLabels:
+      app: kvstore
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kvstore
+    spec:
+      containers:
+      - name: kvstore
+        image: abhirockzz/kvstore:latest
+        volumeMounts:
+        - mountPath: /data
+          name: data-volume
+        ports:
+        - containerPort: 8080
+      volumes:
+        - name: data-volume
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kvstore-service
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+  selector:
+    app: kvstore

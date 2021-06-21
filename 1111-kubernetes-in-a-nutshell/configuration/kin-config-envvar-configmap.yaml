@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: simpleconfig
+data:
+  foo: bar
+  hello: world
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod2
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    env:
+      - name: FOO_ENV_VAR
+        valueFrom:
+          configMapKeyRef:
+            name: simpleconfig
+            key: foo
+      - name: HELLO_ENV_VAR
+        valueFrom:
+          configMapKeyRef:
+            name: simpleconfig
+            key: hello

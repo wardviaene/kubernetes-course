@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kin-stateless-depl
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kin-stateless-depl
+  template:
+    metadata:
+      labels:
+        app: kin-stateless-depl
+    spec:
+      containers:
+      - name: nginx
+        image: nginx

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test-pod
+  template:
+    metadata:
+      labels:
+        app: test-pod
+    spec:
+      containers:
+      - name: python-http-server
+        image: python:2.7
+        command: ["/bin/bash"]
+        args: ["-c", "echo \" Hello from $(hostname)\" > index.html; python -m SimpleHTTPServer 80"]
+        ports:
+        - name: http
+          containerPort: 80
