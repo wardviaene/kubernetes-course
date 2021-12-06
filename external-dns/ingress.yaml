@@ -3,6 +3,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: helloworld-rules
+  annotations:
+    kubernetes.io/ingress.class: k8s.io/ingress-nginx
 spec:
   rules:
   - host: helloworld-v1.kubernetes.newtech.academy
@@ -25,3 +27,19 @@ spec:
             name: helloworld-v2
             port:
               number: 80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ingress-nginx-controller
+data:
+  use-proxy-protocol: "true"
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: ingress-nginx
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  controller: k8s.io/ingress-nginx
