@@ -9,50 +9,46 @@ kubectl create -f storage.yml
 # setup Operator
 ```
 ./quickstart.sh
-./set-path.sh 
-```
-
-After these commands you'll need to logout and login again.
-
-# port forwarding
-
-```
-kubectl get pods -n pgo
-kubectl port-forward -n pgo postgres-operator-xxx-yyy 8443:8443
-```
-
-# Test command
-
-```
-pgo version
 ```
 
 # Create cluster
 
 ```
-pgo create cluster mycluster
+kubectl apply -f postgres-example.yaml
+```
+
+# Show cluster pods
+
+```
+kubectl get pods -n postgres-operator
 ```
 
 # show secrets
 ```
-pgo show cluster mycluster
+kubectl get secrets -n postgres-operator hippo-pguser-hippo -o yaml |grep user |cut -d ':' -f2 |cut -d ' ' -f2 |base64 --decode
+kubectl get secrets -n postgres-operator hippo-pguser-hippo -o yaml |grep password |cut -d ':' -f2 |cut -d ' ' -f2 |base64 --decode
+kubectl get secrets -n postgres-operator hippo-pguser-hippo -o yaml |grep host |cut -d ':' -f2 |cut -d ' ' -f2 |base64 --decode
 ```
 
 # connect to psql
+
+Use user, password, and host from previous step.
+
 ```
-pgo show user mycluster
-kubectl run -it --rm --image=postgres:10.4 psql-client -- psql -h mycluster.pgo -U testuser -W postgres
+kubectl run -n postgres-operator -it --rm --image=postgres:10.4 psql-client -- psql -h hippo-primary.postgres-operator.svc -U hippo -W postgres
 ```
+
+Note: When you see 'If you don't see a command prompt, try pressing enter.', you can enter the password
 
 
 # Create read replic
+Once you add replicas: 2 to the yaml definition, and you apply it, you'll see the new replica being spun up
 ```
-pgo scale mycluster
+kubectl apply -f postgres-example-scale.yaml
+kubectl get pods -n postgres-operator
 ```
 
-# manually failover
+# Shutdown cluster
 ```
-pgo failover mycluster --query
-pgo failover mycluster --target=mycluster-xxx
-kubectl get pgtasks mycluster-failover -o yaml
+kubectl patch postgrescluster/hippo -n postgres-operator --type merge --patch '{"spec":{"shutdown": true}}'
 ```
