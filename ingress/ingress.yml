@@ -6,6 +6,12 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: k8s.io/ingress-nginx
 spec:
+  #To specify a default backend, uncomment the following lines:
+  #defaultBackend:
+  #  service:
+  #    name: echoheaders-default 
+  #    port:
+  #      number: 80
   rules:
   - host: helloworld-v1.example.com
     http:
