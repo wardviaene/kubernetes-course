@@ -1,25 +1,11 @@
 # Helm
 
-## Install helm (helm <3.0)
-```
-wget https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz
-tar -xzvf helm-v2.11.0-linux-amd64.tar.gz
-sudo mv linux-amd64/helm /usr/local/bin/helm
-```
-
-If you want a more recent helm version (>3.0), use:
+## Install helm
 ```
 wget https://get.helm.sh/helm-v3.2.3-linux-amd64.tar.gz
 ```
 
 Make sure to use the correct instructions below for the different helm versions. You can get the latest helm version from https://github.com/helm/helm/releases. If you want to install helm on Windows/MacOS then have a look at https://helm.sh/docs/intro/install/ for instructions.
-
-## Initialize helm (only for helm <3.0)
-
-```
-kubectl create -f helm-rbac.yaml
-helm init --service-account tiller
-```
 
 ## Initialize helm (helm >3.0)
 
