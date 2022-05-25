@@ -12,7 +12,8 @@ kubectl create configmap readme --from-file=README.md
 ```
 
 ## List backups
+bash is not available anymore in this container image, so make sure you use "sh" instead of "bash"
 ```
-kubectl exec -it etcd-main -n kube-system -- bash
+kubectl exec -it etcd-main -n kube-system -- sh
 ./etcd-manager-ctl -backup-store=s3://kops-state-b429b/kubernetes.newtech.academy/backups/etcd/main/ list-backups
 ```
