@@ -3,8 +3,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: helloworld-rules
-  annotations:
-    kubernetes.io/ingress.class: k8s.io/ingress-nginx
 spec:
   #To specify a default backend, uncomment the following lines:
   #defaultBackend:
