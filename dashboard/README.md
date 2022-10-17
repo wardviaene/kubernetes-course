@@ -17,6 +17,7 @@ kubectl create -f sample-user.yaml
 
 ## Get login token:
 ```
+kubectl -n kube-system create token admin-user
 kubectl -n kube-system get secret | grep admin-user
 kubectl -n kube-system describe secret admin-user-token-<id displayed by previous command>
 ```
