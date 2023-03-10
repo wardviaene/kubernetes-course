@@ -51,7 +51,7 @@ spec:
               secretKeyRef:
               {{- if .Values.mariadb.enabled }}
                 name: {{ template "mariadb.fullname" . }}
-                key: mariadb-password
+                key: mariadb-root-password
               {{- else }}
                 name: unknown
                 key: db-password
