@@ -36,13 +36,13 @@ spec:
           {{- end }}
           - name: MYSQL_USER
           {{- if .Values.mariadb.enabled }}
-            value: {{ .Values.mariadb.db.user | quote }}
+            value: {{ .Values.mariadb.auth.username | quote }}
           {{- else }}
             value: unknown
           {{- end }}
           - name: MYSQL_DATABASE
           {{- if .Values.mariadb.enabled }}
-            value: {{ .Values.mariadb.db.name | quote }}
+            value: {{ .Values.mariadb.auth.database | quote }}
           {{- else }}
             value: unknown
           {{- end }}
@@ -51,7 +51,7 @@ spec:
               secretKeyRef:
               {{- if .Values.mariadb.enabled }}
                 name: {{ template "mariadb.fullname" . }}
-                key: mariadb-root-password
+                key: mariadb-password
               {{- else }}
                 name: unknown
                 key: db-password

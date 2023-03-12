@@ -51,9 +51,9 @@ mariadb:
   enabled: true
   replication:
     enabled: false
-  db:
-    name: app
-    user: app-user
+  auth:
+    database: app
+    username: app-user
   master:
     persistence:
       enabled: true
