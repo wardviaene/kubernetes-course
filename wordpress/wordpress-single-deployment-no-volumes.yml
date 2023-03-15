@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: wordpress
-        image: wordpress:4-php7.0
+        image: wordpress:6-php8.0
         ports:
         - name: http-port
           containerPort: 80
@@ -26,12 +26,18 @@ spec:
                 key: db-password
           - name: WORDPRESS_DB_HOST
             value: 127.0.0.1
+          - name: WORDPRESS_DB_USER
+            value: root
+          - name: WORDPRESS_DB_NAME
+            value: wordpress
       - name: mysql
         image: mysql:8
         ports:
         - name: mysql-port
           containerPort: 3306
         env:
+          - name: MYSQL_DATABASE
+            value: wordpress
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
