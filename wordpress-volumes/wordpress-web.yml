@@ -72,11 +72,11 @@ spec:
                 key: noncesalt
           - name: WORDPRESS_DB_HOST
             value: wordpress-db
-              #  volumeMounts:
-              #  - mountPath: /var/www/html/wp-content/uploads
-              #    name: uploads
-              #volumes:
-              #- name: uploads
-              #  nfs:
-              #    server: eu-west-1a.fs-5714e89e.efs.eu-west-1.amazonaws.com
-              #    path: /
+        volumeMounts:
+        - mountPath: /var/www/html/wp-content/uploads
+          name: uploads
+      volumes:
+      - name: uploads
+        nfs:
+          server: eu-west-1a.fs-5714e89e.efs.eu-west-1.amazonaws.com
+          path: /
