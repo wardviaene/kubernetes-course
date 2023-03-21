@@ -1,0 +1,39 @@
+Focus on config map,secrets,RBAC,ingress,DNS,Load balancer,certs
+
+For volumes look 
+aws autoprovisioner
+
+https://github.com/gaya3chandran1/kubernetes-course/blob/master/wordpress-volumes/storage.yml
+
++++++++++++
+PV Claim
+https://github.com/gaya3chandran1/kubernetes-course/blob/master/wordpress-volumes/pv-claim.yml
+==================
+config map
+https://github.com/gaya3chandran1/kubernetes-course/blob/master/configmap/nginx.yml
+
+kubectl create configmap nginx-config --from-file=congigmap/reverseproxy.conf
+
+https://github.com/gaya3chandran1/kubernetes-course/tree/master/configmap/g3-cm
+===================
+
+Secrets
+https://github.com/gaya3chandran1/kubernetes-course/blob/master/configmap/g3-cm-secrets/secrets/secret-pod.yaml
+
+Config maps ideally stores application configuration in a plain text format whereas Secrets store sensitive data like password in an encrypted format.
+
+Both config maps and secrets can be used as volume and mounted inside a pod through a pod definition file.
+
+Config map:
+
+        kubectl create configmap myconfigmap --from-literal=env=dev
+ 
+Secret:
+
+echo -n ‘admin’ > ./username.txt
+echo -n ‘abcd1234’ ./password.txt
+kubectl create secret generic mysecret --from-file=./username.txt --from-file=./password.txt
+=====================
+
+DNS
+https://github.com/gaya3chandran1/kubernetes-course/tree/master/1g3-ingress-cm-secrets-dns/g3-dns

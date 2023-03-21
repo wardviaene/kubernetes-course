@@ -1,0 +1,59 @@
+#####
+#####for OC convert all these to json
+create a PV
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: claim1
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+    volumeName: pv0001
+---
+create a deploy
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+      - name: jenkins
+        image: jenkins:2.60.3
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: pv0001
+          mountPath: "/var/jenkins_home"
+      volumes:
+      - name: pv0001
+        persistentVolumeClaim:
+          claimName: claim1
+---
+###create a service and then route it
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+spec:
+  selector:
+    app: jenkins
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

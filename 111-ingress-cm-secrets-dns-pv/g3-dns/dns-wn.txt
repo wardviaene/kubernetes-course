@@ -1,0 +1,65 @@
+#https://medium.com/kubernetes-tutorials/kubernetes-dns-for-services-and-pods-664804211501
+
+Kubernetes DNS system assigns domain and sub-domain names to pods, ports, and services, which allows them to be discoverable by other components inside your Kubernetes cluster.
+
+============
+DNS-based service discovery is very powerful because you don’t need to hard-code network parameters like IPs and ports into your application. Once a set of pods is managed by a service, you can easily access them using the service’s DNS
+====================
+With DNS, Kubernetes services can be referenced by name that will correspond to any number of backend pods managed by the service
+
+
+=====================
+kubectl get po test
+test-deployment-674667c867-l649z         1/1     Running     0          77m
+test-deployment-674667c867-pr8xd         1/1     Running     0          77m
+test-deployment-674667c867-wppjk         1/1     Running     0          77m
+========================
+
+
+kubectl logs client-pod
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    45  100    45    0     0   7500      0 --:--:-- --:--:-- --:--:--  7500
+ Hello from test-deployment-674667c867-l649z
+================
+
+kubectl exec -it test-deployment-674667c867-l649z bash
+
+root@test-deployment-674667c867-l649z:/# apt-get update
+Hit:1 http://security.debian.org/debian-security buster/updates InRelease
+Hit:2 http://deb.debian.org/debian buster InRelease
+Hit:3 http://deb.debian.org/debian buster-updates InRelease
+Reading package lists... Done
+
+root@test-deployment-674667c867-l649z:/# apt-get install busybox
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+busybox is already the newest version (1:1.30.1-4).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+root@test-deployment-674667c867-l649z:/# busybox nslookup test-service.default.svc.cluster.local
+Server:         10.96.0.10
+Address:        10.96.0.10:53
+
+
+Name:   test-service.default.svc.cluster.local
+Address: 10.97.198.149
+####address is same as the one in below service
+===============================
+ kubectl describe svc test-service
+Name:              test-service
+Namespace:         default
+Labels:            <none>
+Annotations:       <none>
+Selector:          app=test-pod
+Type:              ClusterIP
+IP:                10.97.198.149 #######check this
+Port:              <unset>  4000/TCP
+TargetPort:        http/TCP
+Endpoints:         172.17.0.18:80,172.17.0.19:80,172.17.0.20:80
+Session Affinity:  None
+Events:            <none>
+
+======================================
+
