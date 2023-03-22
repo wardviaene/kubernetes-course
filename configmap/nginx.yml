@@ -20,7 +20,7 @@ spec:
   volumes:
     - name: config-volume
       configMap:
-        name: nginx-config
+        name: nginx-conf
         items:
         - key: reverseproxy.conf
           path: reverseproxy.conf
